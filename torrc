@@ -1,0 +1,21 @@
+RunAsDaemon 0
+# We don't need an open SOCKS port.
+SocksPort 0
+BridgeRelay 1
+Nickname ST01
+Log notice stdout
+ServerTransportPlugin snowflake exec /snowflake-server --disable-tls --log /snowflake.log
+ExtORPort auto
+DataDirectory /var/lib/torst01
+
+# The variable "OR_PORT" is replaced with the OR port.
+ORPort 9050
+
+# The variable "PT_PORT" is replaced with the obfs4 port.
+ServerTransportListenAddr snowflake 0.0.0.0:80
+
+# The variable "EMAIL" is replaced with the operator's email address.
+ContactInfo shelikhoo@torproject.org
+
+AssumeReachable 1
+

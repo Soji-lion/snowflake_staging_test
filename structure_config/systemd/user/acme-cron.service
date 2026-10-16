@@ -1,0 +1,13 @@
+[Unit]
+Description=Renew certificates acquired via acme.sh
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%S/acmesh/bin/acme.sh --cron
+ExecStartPost=/bin/bash -c "%S/acmesh/bin/certToResource.sh %S/acmesh/state/.acme.sh/$HOST_CERT_NAME/fullchain.cer %S/acmesh/state/.acme.sh/$HOST_CERT_NAME/vwyjlwqyoh3sqmycg6wmi5e732the58s3png-testing.v2fly.org.key |HOME=%S/k3s/state/ %S/k3s/bin/k3s kubectl apply -f -"
+# acme.sh returns 2 when renewal is skipped (i.e. certs up to date)
+SuccessExitStatus=0 2
+Restart=on-failure
+Environment=HOME=%S/acmesh/state
+Environment=HOST_CERT_NAME=vwyjlwqyoh3sqmycg6wmi5e732the58s3png-testing.v2fly.org_ecc

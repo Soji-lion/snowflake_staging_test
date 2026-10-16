@@ -1,0 +1,2 @@
+SNOWFLAKE_REPO=https://gitlab.torproject.org/shelikhoo/snowflake.git
+SNOWFLAKE_REPO_ANCHOR=b9cb3c900288a495ebaec9bf57163d28b30c23fd

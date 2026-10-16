@@ -1,0 +1,28 @@
+stages:
+  - container-build
+
+build-container:
+  variables:
+    TAG: "${CI_COMMIT_SHORT_SHA}"
+  stage: container-build
+  parallel:
+    matrix:
+      - ARCH: ["amd64", "arm64"]
+        TARGET: ["broker", "proxy", "tor-server", "fileserver"]
+  tags:
+    - $ARCH
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - source ${CI_PROJECT_DIR}/buildScriptVar.sh
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:${TARGET}_${TAG}_${ARCH}"
+      --target "$TARGET"
+      --build-arg "SNOWFLAKE_REPO=${SNOWFLAKE_REPO}"
+      --build-arg "SNOWFLAKE_REPO_ANCHOR=${SNOWFLAKE_REPO_ANCHOR}"
+      --registry-mirror "public.ecr.aws/docker"
+      --registry-mirror "mirror.gcr.io"
